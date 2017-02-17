@@ -2,9 +2,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Artifact -->
+
     <groupId>com.github.alexaegis</groupId>
     <artifactId>swing-boardgame</artifactId>
-    <version>0.0.2</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
 
     <name>swing-boardgame</name>
@@ -20,11 +22,6 @@
     </dependencies>
 
     <!-- settings -->
-
-    <properties>
-        <github.global.server>GitHub.AlexAegis</github.global.server>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <distributionManagement>
         <repository>
@@ -44,13 +41,11 @@
         <testSourceDirectory>src/test/java/</testSourceDirectory>
 
         <extensions>
-
             <extension>
                 <groupId>org.apache.maven.archetype</groupId>
                 <artifactId>archetype-packaging</artifactId>
                 <version>2.4</version>
             </extension>
-
         </extensions>
 
         <plugins>
@@ -121,8 +116,8 @@
                     <includes>
                         <include>**/*</include>
                     </includes>
-                    <repositoryName>maven-repository</repositoryName> <!-- REFER TO SETTINGS -->
-                    <repositoryOwner>AlexAegis</repositoryOwner> <!-- REFER TO SETTINGS -->
+                    <repositoryName>${github.repositoryname}</repositoryName>
+                    <repositoryOwner>${github.username}</repositoryOwner>
                 </configuration>
                 <executions>
                     <execution>
