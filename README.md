@@ -15,6 +15,38 @@ Maven Repository
 	- 0a.2.1 Either use the bundled one with IntelliJ or download from https://maven.apache.org/download.cgi
 	- 0a.2.2 Add the Maven\bin folder to the 'PATH' variables ("D:\Program Files\JetBrains\IntelliJ IDEA\plugins\maven\lib\maven3\bin")
 	- 0a.2.3 In the bin folder of Maven, make a copy of "mvn.cmd" and rename it to "mvn.bat" Without this you can't create archetypes
+	- 0a.2.4 Provide GitHub login for Maven in the 'settings.xml'. You can encrypt your password with the "mvn --encrypt-master-password password" command
+
+		```xml
+		    <servers>
+	        	<server>
+		            <id>id</id>
+		            <username>username</username>
+		            <password>{password=}</password>
+        		</server>
+    		</servers>
+		```
+	- 0a.2.5 Set up a profile and provide location for the repo
+
+		```xml
+	    <profiles>
+	        <profile>
+	            <id>Profile.ID</id>
+	            <repositories>
+	                <repository>
+	                    <id>Repository.ID</id>
+	                    <name>maven-repository</name>
+	                    <url>https://raw.github.com/${settings.servers.server.username}/maven-repository/mvn-repo/</url>
+	                    <snapshots>
+	                        <enabled>true</enabled>
+	                        <updatePolicy>always</updatePolicy>
+	                    </snapshots>
+	                </repository>
+	            </repositories>
+	        </profile>
+	    </profiles>
+		```
+
 
 ## 0b) Prerequisites (On Linux.Debian)
 
