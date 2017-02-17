@@ -47,22 +47,35 @@ Maven Repository
 	    </profiles>
 		```
 
+### 0.3) Setting up GitHub
+	- 0.3.1 Create a new GitHub repository
+	- 0.3.2 Create a new branch called "mvn-repo" on it
 
-## 0b) Prerequisites (On Linux.Debian)
+## 1) Creating and Hosting Archetypes
 
-### 0b.1) Setting up Java
-	- 0b.1.1 Download it through aptitude
-	- 0b.1.2 WIP
+1.1) Create a project what you want to host as an archetype
+	- 1.1.1 (Suggested base archetype: org.apache.maven.archetypes:maven-archetype-quickstart)
+	- 1.1.2 (Suggested GroupID com.{userID}.archetypes)
+	- 1.1.3 Edit it how you like
+	- 1.1.4 Edit the pom as follows:
+		Change the identifiers. They will be inherited when the project gets created
+		```xml
+			<groupId>${groupId}</groupId>
+			<artifactId>${artifactId}</artifactId>
+			<version>${version}</version>
+		```
 
-### 0b.2) Setting up Maven
-	- 0b.2.1 Download it through aptitude
-	- 0b.2.2 WIP
+## 2) Creating and Hosting Artifacts
 
-## B) Creating and Hosting Archetypes
 
-1.) Create a project what you want to host as an archetype
-	- (Suggested base archetype: org.apache.maven.archetypes:maven-archetype-quickstart)
-	- (Suggested GroupID com.{userID}.archetypes)
+
+
+
+
+
+
+
+
 
 
 ### A1) Using Archetypes
