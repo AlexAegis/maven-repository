@@ -1,7 +1,6 @@
-# maven-repository
-Maven Repository
+# Maven Repository
 
-### How to create your own maven repository on GitHub
+##### How to create your own maven repository on GitHub
 
 ## Prerequisites 
 
