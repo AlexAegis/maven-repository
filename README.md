@@ -208,7 +208,7 @@
 
 
 
-## 1) Creating and Hosting Archetypes
+## 2) Creating and Hosting Archetypes
 
 1.1) Create a project what you want to host as an archetype
 - (Suggested base archetype: org.apache.maven.archetypes:maven-archetype-quickstart)
@@ -222,10 +222,32 @@ Change the identifiers. They will be inherited when the project gets created
 	<version>${version}</version>
 ```
 
-## 2) Creating and Hosting Artifacts
+## 3) Using Artifacts
 
+- Add the repo to your project's pom (Not needed if the super pom had been configured)
 
+```xml
+  <repositories>
+    <repository>
+      <id>maven-repository</id>
+      <url>https://raw.github.com/AlexAegis/maven-repository/mvn-repo/</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+```
 
+- Import Artifacts as a dependency:
+
+```xml
+<dependency>
+    <groupId>com.github.alexaegis</groupId>
+    <artifactId>toolbox</artifactId>
+    <version>0.0.1</version>
+</dependency>
+```
 
 
 
