@@ -118,14 +118,14 @@
             <extension>
                 <groupId>org.apache.maven.archetype</groupId>
                 <artifactId>archetype-packaging</artifactId>
-                <version>2.4</version>
+                <version>3.0.0</version>
             </extension>
         </extensions>
 
         <plugins>
             <plugin>
                 <artifactId>maven-archetype-plugin</artifactId>
-                <version>2.4</version>
+                <version>3.0.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -205,24 +205,7 @@
     </build>
 </project>
 ```
-
-
-
-## 2) Creating and Hosting Archetypes
-
-1.1) Create a project what you want to host as an archetype
-- (Suggested base archetype: org.apache.maven.archetypes:maven-archetype-quickstart)
-- (Suggested GroupID com.{userID}.archetypes)
-- Edit it how you like
-- Edit the pom as follows:
-Change the identifiers. They will be inherited when the project gets created
-```xml
-	<groupId>${groupId}</groupId>
-	<artifactId>${artifactId}</artifactId>
-	<version>${version}</version>
-```
-
-## 3) Using Artifacts
+## 2) Using Artifacts
 
 - Add the repo to your project's pom (Not needed if the super pom had been configured)
 
@@ -249,23 +232,139 @@ Change the identifiers. They will be inherited when the project gets created
 </dependency>
 ```
 
+## 3) Creating and Hosting Archetypes
+
+1.1) Create a project what you want to host as an archetype
+- (Suggested base archetype: org.apache.maven.archetypes:maven-archetype-quickstart)
+- (Suggested GroupID com.{userID}.archetypes)
+- Edit it how you like
+- Make a copy of the project folder and delete the .idea folder and the *.iml file
+- Use "mvn clean archetype:create-from-project" at that folder
+- Go in ".\target\generated-sources" and copy the archetype folder to the repo you want to host it
+- Add these plugins to the archetypes pom, then "mvn deploy"
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>3.6.1</version>
+    <configuration>
+        <source>1.8</source>
+        <target>1.8</target>
+    </configuration>
+    <executions>
+        <execution>
+            <id>default-deploy</id>
+            <phase>deploy</phase>
+        </execution>
+    </executions>
+</plugin>
+
+<plugin>
+    <artifactId>maven-deploy-plugin</artifactId>
+    <version>2.8.2</version>
+    <configuration>
+        <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo
+        </altDeploymentRepository>
+    </configuration>
+</plugin>
+
+<plugin>
+    <artifactId>maven-assembly-plugin</artifactId>
+    <executions>
+        <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+                <goal>single</goal>
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+        <archive>
+            <manifest>
+                <mainClass>${project.groupId}.Main</mainClass>
+            </manifest>
+        </archive>
+        <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+        </descriptorRefs>
+    </configuration>
+</plugin>
+
+<plugin>
+    <groupId>com.github.github</groupId>
+    <artifactId>site-maven-plugin</artifactId>
+    <version>0.12</version>
+    <configuration>
+        <message>Creating site for ${project.version}</message>
+        <noJekyll>true</noJekyll>
+        <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
+        <branch>refs/heads/mvn-repo</branch>
+        <merge>true</merge>
+        <includes>
+            <include>**/*</include>
+        </includes>
+        <repositoryName>${github.repositoryname}</repositoryName>
+        <repositoryOwner>${github.username}</repositoryOwner>
+    </configuration>
+    <executions>
+        <execution>
+            <goals>
+                <goal>site</goal>
+            </goals>
+            <phase>deploy</phase>
+        </execution>
+    </executions>
+</plugin>
+```
+
+## 4) Using Archetypes
 
 
 
+## 5) Building with dependencies:
 
-
-
-
-
-### A1) Using Archetypes
-
-#### A11) Manually from cli
-
-#### A12) From IntelliJ
-
-## B) Hosting Dependencies
-
-
-
-+tutorial point ideas:
-	- maven from cmd (creating projects from archetypes etc)
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+                <source>1.8</source>
+                <target>1.8</target>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>default-deploy</id>
+                    <phase>deploy</phase>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>make-assembly</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <archive>
+                    <manifest>
+                        <mainClass>${project.groupId}.Main</mainClass>
+                    </manifest>
+                </archive>
+                <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
