@@ -241,87 +241,13 @@
 - Make a copy of the project folder and delete the .idea folder and the *.iml file
 - Use "mvn clean archetype:create-from-project" at that folder
 - Go in ".\target\generated-sources" and copy the archetype folder to the repo you want to host it
-- Add these plugins to the archetypes pom, then "mvn deploy"
+- Now upload it as an Artifact. (Add the Settings part from the example POM and then deploy)
 
-```xml
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-compiler-plugin</artifactId>
-    <version>3.6.1</version>
-    <configuration>
-        <source>1.8</source>
-        <target>1.8</target>
-    </configuration>
-    <executions>
-        <execution>
-            <id>default-deploy</id>
-            <phase>deploy</phase>
-        </execution>
-    </executions>
-</plugin>
+## 4) Using Archetypes from IntelliJ
 
-<plugin>
-    <artifactId>maven-deploy-plugin</artifactId>
-    <version>2.8.2</version>
-    <configuration>
-        <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo
-        </altDeploymentRepository>
-    </configuration>
-</plugin>
-
-<plugin>
-    <artifactId>maven-assembly-plugin</artifactId>
-    <executions>
-        <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
-            <goals>
-                <goal>single</goal>
-            </goals>
-        </execution>
-    </executions>
-    <configuration>
-        <archive>
-            <manifest>
-                <mainClass>${project.groupId}.Main</mainClass>
-            </manifest>
-        </archive>
-        <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-        </descriptorRefs>
-    </configuration>
-</plugin>
-
-<plugin>
-    <groupId>com.github.github</groupId>
-    <artifactId>site-maven-plugin</artifactId>
-    <version>0.12</version>
-    <configuration>
-        <message>Creating site for ${project.version}</message>
-        <noJekyll>true</noJekyll>
-        <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
-        <branch>refs/heads/mvn-repo</branch>
-        <merge>true</merge>
-        <includes>
-            <include>**/*</include>
-        </includes>
-        <repositoryName>${github.repositoryname}</repositoryName>
-        <repositoryOwner>${github.username}</repositoryOwner>
-    </configuration>
-    <executions>
-        <execution>
-            <goals>
-                <goal>site</goal>
-            </goals>
-            <phase>deploy</phase>
-        </execution>
-    </executions>
-</plugin>
-```
-
-## 4) Using Archetypes
-
-
+- New Project, Add Archetype
+- GroupID, ArtifactID, version is descriped in the Archetype's POM
+- Repository is: https://raw.github.com/USERNAME/maven-repository/mvn-repo/
 
 ## 5) Building with dependencies:
 
@@ -367,4 +293,29 @@
         </plugin>
     </plugins>
 </build>
+```
+
+## 6) Bonus: .gitignore for Maven/IntelliJ projects
+
+```
+# Java
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# IntelliJ
+.idea/
+*.iml
+
+# Maven
+.target/
 ```
